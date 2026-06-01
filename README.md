@@ -10,12 +10,16 @@ All scripts follow defensive bash practices (set -euo pipefail, trap, logging).
 | submit_and_watch.sh | Submit a Slurm job and monitor until completion |
 | check_disk.sh | Check disk usage with configurable warning threshold |
 | module_check.sh | Verify required modules are available before job submission |
+| job_efficiency.sh | Analyse CPU and memory efficiency of recent jobs |
+| hpc_health_check.sh | Quick cluster health check for support engineers |
 
 ## Usage
 
     bash submit_and_watch.sh myjob.sh
     bash check_disk.sh guillaumelumin 80
     bash module_check.sh Python/3.11 NWChem/7.3.0
+    bash job_efficiency.sh guillaumelumin 20
+    bash hpc_health_check.sh
 
 ## Design principles
 
@@ -24,3 +28,4 @@ All scripts follow defensive bash practices (set -euo pipefail, trap, logging).
 - trap for cleanup on interruption
 - Meaningful exit codes
 - Defensive argument checking
+- No silent failures
