@@ -1,0 +1,36 @@
+name: Bash Script Quality Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install shellcheck
+      run: sudo apt-get install -y shellcheck
+
+    - name: Run shellcheck on all bash scripts
+      run: |
+        echo "Checking bash scripts..."
+        shellcheck *.sh
+        echo "All scripts passed shellcheck"
+
+    - name: Verify set -euo pipefail in all scripts
+      run: |
+        echo "Verifying defensive bash practices..."
+        for f in *.sh; do
+          if grep -q "set -euo pipefail" "$f"; then
+            echo "OK: $f has set -euo pipefail"
+          else
+            echo "FAIL: $f missing set -euo pipefail"
+            exit 1
+          fi
+        done
