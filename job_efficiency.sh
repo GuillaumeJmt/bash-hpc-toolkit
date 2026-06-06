@@ -20,7 +20,7 @@ echo "---"
 
 sacct -u "$USERNAME" \
     -n \
-    --jobs=$(sacct -u "$USERNAME" -n --format=JobID | head -"$NB_JOBS" | tr '\n' ',' | sed 's/,$//') \
+    --jobs="$(sacct -u "$USERNAME" -n --format=JobID | head -"$NB_JOBS" | tr '\n' ',' | sed 's/,$/'/)" \
     --format=JobID,JobName,State,Elapsed,CPUTime,MaxRSS,ReqMem,ExitCode \
     2>/dev/null || log "sacct not available or no jobs found"
 

@@ -13,6 +13,7 @@ if [[ $# -eq 0 ]]; then
     exit 1
 fi
 
+# shellcheck source=/dev/null
 source /etc/profile.d/lmod.sh 2>/dev/null || true
 
 FAILED=0
