@@ -34,6 +34,7 @@ if [[ ! -f "$JOBSCRIPT" ]]; then
 fi
 
 # --- Nettoyage automatique en cas d'interruption ---
+JOB_ID=""
 trap 'log "Script interrupted. Job $JOB_ID may still be running."; exit 1' INT TERM
 
 # --- Soumission ---
