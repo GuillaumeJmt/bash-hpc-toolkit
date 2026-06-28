@@ -1,7 +1,10 @@
 # Bash HPC Toolkit
 
-Production-grade bash scripts for HPC support engineers.
+Defensive, robust bash scripts for HPC support, developed and tested in a
+single-node Slurm environment (Lima VM).
 All scripts follow defensive bash practices (set -euo pipefail, trap, logging).
+
+**Note:** submit_and_watch.sh is limited by Lima cgroup constraints in the test VM.
 
 ## Scripts
 
