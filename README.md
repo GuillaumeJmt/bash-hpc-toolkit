@@ -1,6 +1,6 @@
 # Bash HPC Toolkit
 
-Defensive, robust bash scripts for HPC support, developed and tested in a
+Defensive bash scripts for HPC support, developed and tested in a
 single-node Slurm environment (Lima VM).
 All scripts follow defensive bash practices (set -euo pipefail, trap, logging).
 
