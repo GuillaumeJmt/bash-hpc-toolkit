@@ -18,12 +18,24 @@ log() {
 log "Efficiency report for: $USERNAME (last $NB_JOBS jobs)"
 echo "---"
 
-sacct -u "$USERNAME" \
-    -n \
-    --jobs="$(sacct -u "$USERNAME" -n --format=JobID | head -"$NB_JOBS" | tr '\n' ',' | sed 's/,$/'/)" \
-    --format=JobID,JobName,State,Elapsed,CPUTime,MaxRSS,ReqMem,ExitCode \
-    2>/dev/null || log "sacct not available or no jobs found"
+# Collect the N most recent allocation IDs (-X = allocations only, no
+# .batch/.extern steps). `|| true` keeps the script alive under set -e/pipefail
+# when off-cluster or when sacct is absent.
+JOB_IDS=$(sacct -u "$USERNAME" -X -n --format=JobIDRaw 2>/dev/null \
+    | awk 'NF {print $1}' \
+    | head -n "$NB_JOBS" \
+    | paste -sd, - || true)
+
+if [[ -z "$JOB_IDS" ]]; then
+    log "No recent jobs found for $USERNAME (or sacct unavailable)"
+    exit 0
+fi
+
+sacct -X -j "$JOB_IDS" \
+    --format=JobIDRaw,JobName,State,Elapsed,CPUTime,MaxRSS,ReqMem,ExitCode \
+    2>/dev/null || log "sacct query failed"
 
 echo "---"
 log "Tip: compare MaxRSS vs ReqMem to calibrate memory requests"
-log "Tip: compare Elapsed*CPUs vs CPUTime to check CPU efficiency"
+log "Tip: compare Elapsed*NCPUS vs CPUTime to check CPU efficiency"
+# end of file
